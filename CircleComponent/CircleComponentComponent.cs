@@ -32,7 +32,7 @@ namespace CircleComponent
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("String", "S", "String to reverse", GH_ParamAccess.item);
+            pManager.AddSurfaceParameter("rectangle","rect","The target rectangle", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,6 +40,7 @@ namespace CircleComponent
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddCurveParameter("Circles", "cirs", "The generated circles", GH_ParamAccess.item);
             pManager.AddTextParameter("Reverse", "R", "Reversed string", GH_ParamAccess.item);
         }
 
@@ -51,19 +52,44 @@ namespace CircleComponent
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Declare a variable for the input String
-            string data = null;
+            
+            
 
             // Use the DA object to retrieve the data inside the first input parameter.
             // If the retieval fails (for example if there is no data) we need to abort.
-            if (!DA.GetData(0, ref data)) { return; }
+            if (!DA.GetData(0, ref srf)) { return; }
 
             // If the retrieved data is Nothing, we need to abort.
             // We're also going to abort on a zero-length String.
-            if (data == null) { return; }
-            if (data.Length == 0) { return; }
+            
+            if (!srf.IsValid) { return; }
+            
 
             // Convert the String to a character array.
-            char[] chars = data.ToCharArray();
+            
+
+            //
+            int count = 0;
+            int total = 10;
+            int attempts = 0;
+            List<Circle> circles = new List<Circle>();
+            
+            while(count < total)
+            {
+                Circle newC = new Circle();
+                
+                if(newC.IsValid)
+                {
+                    circles.Add(newC);
+                    count++;
+                }
+                attempts++;
+                if (attempts > 1000)
+                {
+                    noLoop();
+                    break;
+                }
+            }
 
             // Reverse the array of character.
             System.Array.Reverse(chars);
@@ -95,5 +121,20 @@ namespace CircleComponent
         {
             get { return new Guid("75d07d5f-f961-4d40-9e3d-0114155e3cc5"); }
         }
+    }
+
+    public class Circle
+    {
+        double x;
+        double y;
+        double r;
+
+        Circle(double x_, double y_)
+        {
+            x = x_;
+            y = y_;
+
+        }
+
     }
 }
