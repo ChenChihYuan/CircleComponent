@@ -9,7 +9,7 @@ namespace CircleComponent
         public override string Name
         {
             get
-            {
+            {  
                 return "CircleComponent";
             }
         }
