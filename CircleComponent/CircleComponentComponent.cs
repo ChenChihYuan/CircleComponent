@@ -32,6 +32,7 @@ namespace CircleComponent
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddIntegerParameter("int","input integer1","The first Integer to be input", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -48,6 +49,7 @@ namespace CircleComponent
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            Plane plane = Plane.WorldXY;
         }
 
         /// <summary>
