@@ -32,7 +32,7 @@ namespace CircleComponent
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("int","input integer1","The first Integer to be input", GH_ParamAccess.item);
+            pManager.AddTextParameter("String", "S", "String to reverse", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,6 +40,7 @@ namespace CircleComponent
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddTextParameter("Reverse", "R", "Reversed string", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -49,7 +50,26 @@ namespace CircleComponent
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Plane plane = Plane.WorldXY;
+            // Declare a variable for the input String
+            string data = null;
+
+            // Use the DA object to retrieve the data inside the first input parameter.
+            // If the retieval fails (for example if there is no data) we need to abort.
+            if (!DA.GetData(0, ref data)) { return; }
+
+            // If the retrieved data is Nothing, we need to abort.
+            // We're also going to abort on a zero-length String.
+            if (data == null) { return; }
+            if (data.Length == 0) { return; }
+
+            // Convert the String to a character array.
+            char[] chars = data.ToCharArray();
+
+            // Reverse the array of character.
+            System.Array.Reverse(chars);
+
+            // Use the DA object to assign a new String to the first output parameter.
+            DA.SetData(0, new string(chars));
         }
 
         /// <summary>
